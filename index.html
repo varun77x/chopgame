@@ -11,37 +11,37 @@
     <h1>Alphabet Hack (NoPixel 4.0)</h1>
     <p class="">Tap the letters in order</p>
     <div id="game-board"></div>
+    <div id="timer-container">
+        <label for="timer-input">Timer duration (seconds):</label>
+        <input type="number" id="timer-input" value="5" min="1" step="1">
+    </div>
     <div id="message"></div>
     <button id="start-button">Start Game<br>(Enter)</button>
-    <label for="timer-input">Timer duration (seconds):</label>
-    <input type="number" id="timer-input" value="5" min="1" step="1">
+
     <footer class="footer">Made by BAAAAA!</footer>
 
     <script>
         // Available characters
-const characters = ['Q', 'W', 'E', 'A', 'S', 'D', 'R'];
+        const characters = ['Q', 'W', 'E', 'A', 'S', 'D', 'R'];
 
-// Generate a random character
-function getRandomCharacter(previousCharacter) {
-  const randomIndex = Math.floor(Math.random() * characters.length);
-  const randomCharacter = characters[randomIndex];
-  
-  // Check if the previous character is the same as the random character
-  if (previousCharacter && previousCharacter === randomCharacter) {
-    // Generate a random number between 0 and 1
-    const probability = Math.random();
-    
-    // If the random number is less than 0.5, generate a new random character
-    if (probability < 0.5) {
-      return getRandomCharacter(previousCharacter);
-    }
-  }
-  
-  return randomCharacter;
-}
+        // Generate a random character
+        function getRandomCharacter(previousCharacter) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            const randomCharacter = characters[randomIndex];
 
-// ... (rest of your existing code remains unchanged)
+            // Check if the previous character is the same as the random character
+            if (previousCharacter && previousCharacter === randomCharacter) {
+                // Generate a random number between 0 and 1
+                const probability = Math.random();
 
+                // If the random number is less than 0.5, generate a new random character
+                if (probability < 0.5) {
+                    return getRandomCharacter(previousCharacter);
+                }
+            }
+
+            return randomCharacter;
+        }
 
         // Generate the game board with question marks
         function generateGameBoardWithQuestionMarks() {
@@ -82,48 +82,48 @@ function getRandomCharacter(previousCharacter) {
 
         // Generate the game board with random characters
         function generateGameBoardWithCharacters() {
-          const gameBoard = document.getElementById('game-board');
-          gameBoard.innerHTML = '';
-        
-          const row1 = document.createElement('div');
-          row1.classList.add('row');
-          let previousCharacter = null;
-          for (let i = 0; i < 6; i++) {
-            const square = document.createElement('div');
-            square.classList.add('square');
-            const randomCharacter = getRandomCharacter(previousCharacter);
-            square.textContent = randomCharacter;
-            previousCharacter = randomCharacter;
-            row1.appendChild(square);
-          }
-          gameBoard.appendChild(row1);
-        
-          const row2 = document.createElement('div');
-          row2.classList.add('row');
-          previousCharacter = null;
-          for (let i = 0; i < 6; i++) {
-            const square = document.createElement('div');
-            square.classList.add('square');
-            const randomCharacter = getRandomCharacter(previousCharacter);
-            square.textContent = randomCharacter;
-            previousCharacter = randomCharacter;
-            row2.appendChild(square);
-          }
-          gameBoard.appendChild(row2);
-        
-          const row3 = document.createElement('div');
-          row3.classList.add('row');
-          row3.classList.add('centered-row');
-          previousCharacter = null;
-          for (let i = 0; i < 3; i++) {
-            const square = document.createElement('div');
-            square.classList.add('square');
-            const randomCharacter = getRandomCharacter(previousCharacter);
-            square.textContent = randomCharacter;
-            previousCharacter = randomCharacter;
-            row3.appendChild(square);
-          }
-          gameBoard.appendChild(row3);
+            const gameBoard = document.getElementById('game-board');
+            gameBoard.innerHTML = '';
+
+            const row1 = document.createElement('div');
+            row1.classList.add('row');
+            let previousCharacter = null;
+            for (let i = 0; i < 6; i++) {
+                const square = document.createElement('div');
+                square.classList.add('square');
+                const randomCharacter = getRandomCharacter(previousCharacter);
+                square.textContent = randomCharacter;
+                previousCharacter = randomCharacter;
+                row1.appendChild(square);
+            }
+            gameBoard.appendChild(row1);
+
+            const row2 = document.createElement('div');
+            row2.classList.add('row');
+            previousCharacter = null;
+            for (let i = 0; i < 6; i++) {
+                const square = document.createElement('div');
+                square.classList.add('square');
+                const randomCharacter = getRandomCharacter(previousCharacter);
+                square.textContent = randomCharacter;
+                previousCharacter = randomCharacter;
+                row2.appendChild(square);
+            }
+            gameBoard.appendChild(row2);
+
+            const row3 = document.createElement('div');
+            row3.classList.add('row');
+            row3.classList.add('centered-row');
+            previousCharacter = null;
+            for (let i = 0; i < 3; i++) {
+                const square = document.createElement('div');
+                square.classList.add('square');
+                const randomCharacter = getRandomCharacter(previousCharacter);
+                square.textContent = randomCharacter;
+                previousCharacter = randomCharacter;
+                row3.appendChild(square);
+            }
+            gameBoard.appendChild(row3);
         }
 
         // Check user input
@@ -177,6 +177,7 @@ function getRandomCharacter(previousCharacter) {
             clearInterval(timer); // Stop the timer
             document.removeEventListener('keydown', checkInput);
             document.getElementById('start-button').disabled = false;
+            document.getElementById('timer-input').disabled = false; // Enable timer input
         }
 
         let timer; // Declare the timer variable outside the startGame function
@@ -192,6 +193,9 @@ function getRandomCharacter(previousCharacter) {
             const messageEl = document.getElementById('message');
             let timeLeft = timerDuration;
             messageEl.textContent = timeLeft;
+
+            // Disable timer input until the game ends
+            timerInput.disabled = true;
 
             // Set a timer for 1 second
             timer = setInterval(() => {
